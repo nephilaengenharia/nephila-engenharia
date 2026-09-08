@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nephila Engenharia | Reformas e Projetos de Arquitetura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf7f2;
+    --bg-alt:#f1ebe1;
+    --ink:#2b2e24;
+    --ink-soft:#5f6355;
+    --line:#dddecf;
+    --accent:#e2794c;
+    --accent-dark:#b35c30;
+    --card:#ffffff;
+    --nav-bg:rgba(250,247,242,0.92);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Manrope',sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.logo{font-family:'Cormorant Garamond',serif;}
+  a{text-decoration:none;color:inherit;}
+  img{display:block;width:100%;height:100%;object-fit:cover;}
+  .container{max-width:1180px;margin:0 auto;padding:0 32px;}
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:.22em;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--accent);
+  }
+  section{padding:110px 0;}
+  @media(max-width:768px){ section{padding:70px 0;} .container{padding:0 22px;} }
+  #portfolio{padding-bottom:40px;}
+  @media(max-width:768px){ #portfolio{padding-bottom:30px;} }
+
+  /* NAV */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:1000;
+    background:var(--nav-bg);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s;
+  }
+  header.scrolled{border-color:var(--line);}
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 32px;max-width:1180px;margin:0 auto;
+  }
+  .logo{font-size:26px;font-weight:700;letter-spacing:.02em;display:block;}
+  .logo span{color:var(--accent);}
+  .logo img{width:auto;height:34px;object-fit:contain;object-position:left;}
+  .nav-links{display:flex;gap:38px;align-items:center;list-style:none;}
+  .nav-links a{
+    font-size:14.5px;font-weight:500;color:var(--ink-soft);
+    position:relative;padding-bottom:4px;transition:color .2s;
+  }
+  .nav-links a:hover{color:var(--ink);}
+  .nav-links a::after{
+    content:'';position:absolute;left:0;bottom:0;width:0;height:1.5px;
+    background:var(--accent);transition:width .25s;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    background:var(--ink);color:#fff !important;padding:11px 24px;
+    border-radius:2px;font-weight:600;font-size:13.5px;letter-spacing:.03em;
+    transition:background .25s;
+  }
+  .nav-cta:hover{background:var(--accent-dark);}
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .burger span{width:24px;height:2px;background:var(--ink);}
+  @media(max-width:900px){
+    .nav-links{
+      position:fixed;top:73px;left:0;right:0;background:var(--bg);
+      flex-direction:column;padding:28px;gap:22px;
+      border-bottom:1px solid var(--line);
+      transform:translateY(-130%);transition:transform .3s ease;
+    }
+    .nav-links.open{transform:translateY(0);}
+    .burger{display:flex;}
+  }
+
+  /* HERO */
+  .hero{
+    position:relative;min-height:100vh;display:flex;align-items:flex-end;
+    padding-bottom:170px;
+  }
+  .hero-bg{
+    position:absolute;inset:0;z-index:-2;
+  }
+  .hero-bg img{filter:brightness(0.55) saturate(1.05);}
+  .hero-bg::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(24,28,20,.35) 0%, rgba(24,28,20,.15) 40%, rgba(24,28,20,.75) 100%);
+  }
+  .hero-content{color:#fff;max-width:760px;position:relative;z-index:1;}
+  .hero-logo{width:min(280px,60vw);height:auto;margin-bottom:20px;object-fit:contain;object-position:left;}
+  .hero .eyebrow{color:#e3b98a;}
+  .hero h1{
+    font-size:clamp(38px,5.5vw,68px);
+    font-weight:600;line-height:1.08;margin:18px 0 22px;
+  }
+  .hero p{font-size:17px;color:#e9e3d8;max-width:520px;margin-bottom:34px;}
+  .btn-row{display:flex;gap:16px;flex-wrap:wrap;}
+  .btn{
+    display:inline-block;padding:15px 30px;font-weight:600;font-size:14px;
+    letter-spacing:.03em;border-radius:2px;transition:all .25s;border:1px solid transparent;
+  }
+  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-primary:hover{background:var(--accent-dark);}
+  .btn-outline{border-color:rgba(255,255,255,.55);color:#fff;}
+  .btn-outline:hover{background:rgba(255,255,255,.12);}
+  .hero-stats{
+    position:absolute;bottom:0;left:0;right:0;
+    background:rgba(20,24,16,.55);backdrop-filter:blur(6px);
+    border-top:1px solid rgba(255,255,255,.15);
+  }
+  .hero-stats .container{
+    display:flex;justify-content:space-between;padding:26px 32px;flex-wrap:wrap;gap:20px;
+  }
+  @media(max-width:700px){
+    .hero{min-height:auto;padding:150px 0 0;display:block;}
+    .hero-stats{position:static;margin-top:44px;}
+    .hero-stats .container{justify-content:flex-start;gap:26px 40px;padding:24px 22px;}
+  }
+  .stat{color:#fff;}
+  .stat b{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;display:block;color:#f2ddc4;}
+  .stat span{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:#cfc6b8;}
+
+  /* SECTION HEAD */
+  .section-head{max-width:620px;margin-bottom:56px;}
+  .section-head h2{font-size:clamp(30px,4vw,44px);font-weight:600;margin-top:14px;}
+  .section-head p{color:var(--ink-soft);margin-top:16px;font-size:16px;}
+  .center{text-align:center;margin-left:auto;margin-right:auto;}
+
+  /* ABOUT */
+  .about{background:var(--bg);}
+  .about-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:64px;align-items:center;}
+  .about-imgs{position:relative;height:460px;}
+  .about-imgs .img-a{position:absolute;width:72%;height:78%;top:0;left:0;border-radius:3px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(40,30,15,.35);}
+  .about-imgs .img-b{position:absolute;width:52%;height:52%;bottom:0;right:0;border-radius:3px;overflow:hidden;border:6px solid var(--bg);box-shadow:0 20px 40px -15px rgba(40,30,15,.4);}
+  .about-text p{color:var(--ink-soft);margin-bottom:18px;font-size:16px;}
+  .about-list{list-style:none;margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;}
+  .about-list li{font-size:14.5px;font-weight:600;color:var(--ink);display:flex;gap:10px;align-items:center;}
+  .about-list li::before{content:'';width:7px;height:7px;background:var(--accent);border-radius:50%;flex:none;}
+  @media(max-width:860px){ .about-grid{grid-template-columns:1fr;} .about-imgs{height:360px;margin-bottom:20px;} }
+
+  /* SERVICES */
+  .services{background:var(--bg-alt);}
+  .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line);border:1px solid var(--line);}
+  .service-card{background:var(--card);padding:44px 36px;transition:background .25s;}
+  .service-card:hover{background:#fff8f0;}
+  .service-num{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--accent);font-weight:600;}
+  .service-card h3{font-size:23px;font-weight:600;margin:16px 0 12px;}
+  .service-card p{color:var(--ink-soft);font-size:14.5px;}
+  @media(max-width:860px){ .services-grid{grid-template-columns:1fr;} }
+
+  /* PORTFOLIO */
+  .portfolio-project{margin-bottom:64px;}
+  .portfolio-project:last-child{margin-bottom:0;}
+  .portfolio-project-title{font-size:26px;font-weight:600;margin-bottom:8px;}
+  .portfolio-project-desc{color:var(--ink-soft);font-size:14.5px;margin-bottom:24px;}
+  .portfolio-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;gap:14px;
+  }
+  .p-item{position:relative;overflow:hidden;border-radius:3px;cursor:pointer;}
+  .p-item img{transition:transform .5s ease;}
+  .p-item:hover img{transform:scale(1.08);}
+  .p-item.big{grid-column:span 2;grid-row:span 2;}
+  .p-overlay{
+    position:absolute;inset:0;background:linear-gradient(180deg, rgba(24,28,20,0) 45%, rgba(24,28,20,.85) 100%);
+    display:flex;align-items:flex-end;padding:20px;opacity:0;transition:opacity .3s;
+  }
+  .p-item:hover .p-overlay{opacity:1;}
+  .p-overlay div{color:#fff;}
+  .p-overlay .tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#e3b98a;font-weight:600;}
+  .p-overlay .title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;margin-top:4px;}
+  @media(max-width:900px){
+    .portfolio-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:200px;}
+    .p-item.big{grid-column:span 2;grid-row:span 1;}
+  }
+
+  /* PROCESS */
+  .process{background:var(--bg);}
+  .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:36px;}
+  .process-card{position:relative;padding-top:14px;}
+  .process-card .n{
+    font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:700;color:var(--line);
+    -webkit-text-stroke:1.5px var(--accent);color:transparent;
+  }
+  .process-card h3{font-size:19px;font-weight:600;margin:10px 0 8px;}
+  .process-card p{color:var(--ink-soft);font-size:14px;}
+  @media(max-width:860px){ .process-grid{grid-template-columns:1fr 1fr;row-gap:34px;} }
+  @media(max-width:560px){ .process-grid{grid-template-columns:1fr;} }
+
+  /* TESTIMONIALS */
+  .testimonials{background:var(--ink);color:#f2ede3;}
+  .testimonials .eyebrow{color:#e3b98a;}
+  .testimonials .section-head h2{color:#fff;}
+  .testimonials .section-head p{color:#c9c0b0;}
+  .t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .t-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:34px;border-radius:4px;}
+  .t-stars{color:#e3b98a;letter-spacing:3px;margin-bottom:16px;font-size:15px;}
+  .t-card p{color:#dcd5c8;font-size:15px;margin-bottom:22px;}
+  .t-person{display:flex;align-items:center;gap:12px;}
+  .t-avatar{width:42px;height:42px;border-radius:50%;overflow:hidden;flex:none;}
+  .t-person b{display:block;font-size:14.5px;}
+  .t-person span{font-size:12.5px;color:#a89e8c;}
+  @media(max-width:860px){ .t-grid{grid-template-columns:1fr;} }
+
+  /* CONTACT */
+  .contact{background:var(--bg-alt);}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;}
+  .contact-info h2{font-size:clamp(28px,4vw,40px);font-weight:600;margin:14px 0 18px;}
+  .contact-info p{color:var(--ink-soft);margin-bottom:30px;font-size:15.5px;}
+  .info-row{display:flex;gap:16px;align-items:flex-start;margin-bottom:22px;}
+  .info-ic{
+    width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:17px;
+  }
+  .info-row b{display:block;font-size:15px;}
+  .info-row span{font-size:14px;color:var(--ink-soft);}
+  form{background:var(--card);padding:38px;border-radius:4px;border:1px solid var(--line);}
+  .f-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px;}
+  .field input,.field select,.field textarea{
+    width:100%;border:1px solid var(--line);background:var(--bg);padding:12px 14px;
+    font-family:inherit;font-size:14.5px;border-radius:2px;color:var(--ink);
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);}
+  .field textarea{resize:vertical;min-height:100px;}
+  .submit-btn{width:100%;background:var(--ink);color:#fff;border:none;padding:15px;font-weight:600;font-size:14.5px;letter-spacing:.03em;border-radius:2px;cursor:pointer;transition:background .25s;}
+  .submit-btn:hover{background:var(--accent-dark);}
+  .form-note{font-size:12.5px;color:var(--ink-soft);margin-top:12px;text-align:center;}
+  @media(max-width:860px){ .contact-grid{grid-template-columns:1fr;} .f-row{grid-template-columns:1fr;} }
+
+  /* FOOTER */
+  footer{background:var(--ink);color:#c9c0b0;padding:60px 0 26px;}
+  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:44px;border-bottom:1px solid rgba(255,255,255,.1);}
+  .footer-logo{font-size:24px;color:#fff;margin-bottom:14px;}
+  .footer-logo span{color:var(--accent);}
+  .footer-logo-img{width:190px;height:auto;object-fit:contain;object-position:left;margin-bottom:16px;}
+  .footer-col h4{color:#fff;font-size:14px;margin-bottom:16px;letter-spacing:.03em;}
+  .footer-col ul{list-style:none;}
+  .footer-col li{margin-bottom:10px;font-size:14px;}
+  .footer-col a:hover{color:#fff;}
+  .footer-bottom{display:flex;justify-content:space-between;padding-top:24px;font-size:13px;flex-wrap:wrap;gap:10px;}
+  .socials{display:flex;gap:14px;}
+  .socials a{width:34px;height:34px;border:1px solid rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;}
+  .socials a:hover{background:var(--accent);border-color:var(--accent);}
+  @media(max-width:860px){ .footer-grid{grid-template-columns:1fr 1fr;} }
+
+  /* reveal animation */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.show{opacity:1;transform:translateY(0);}
+
+  /* text reveal — words rise up like a curtain */
+  .split-reveal .word{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:0.15em;margin-bottom:-0.15em;}
+  .split-reveal .word-inner{display:inline-block;transform:translateY(115%);transition:transform .7s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--i) * 45ms);}
+  .split-reveal.show .word-inner{transform:translateY(0);}
+
+  /* whatsapp float */
+  .wa-float{
+    position:fixed;bottom:26px;right:26px;z-index:900;background:var(--accent);color:#fff;
+    width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.25);font-size:26px;
+  }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <nav class="nav">
+    <a href="#top" class="logo"><img src="assets/logo-dark-cropped.png" alt="Nephila Engenharia"></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#portfolio">Portfólio</a></li>
+      <li><a href="#processo">Processo</a></li>
+      <li><a href="#diferenciais">Diferenciais</a></li>
+      <li><a href="#contato" class="nav-cta">Orçamento</a></li>
+    </ul>
+    <button class="burger" id="burger" aria-label="menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=80" alt="Reforma residencial moderna">
+  </div>
+  <div class="container hero-content">
+    <img src="assets/logo-white-cropped.png" alt="Nephila Engenharia" class="hero-logo">
+    <h1 class="split-reveal" id="heroTitle">Reformas e projetos que transformam espaços em experiências</h1>
+    <p>Arquitetura, engenharia e gestão de obra em um só lugar. Da planta ao acabamento, cuidamos de cada detalhe do seu projeto residencial ou comercial.</p>
+    <div class="btn-row">
+      <a href="#contato" class="btn btn-primary">Solicitar orçamento</a>
+      <a href="#portfolio" class="btn btn-outline">Ver portfólio</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="container">
+      <div class="stat"><b>100%</b><span>Foco em qualidade</span></div>
+      <div class="stat"><b>360°</b><span>Do projeto à entrega</span></div>
+      <div class="stat"><b>1:1</b><span>Atendimento personalizado</span></div>
+      <div class="stat"><b>24h</b><span>Retorno ao seu contato</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="sobre">
+  <div class="container about-grid">
+    <div class="about-imgs reveal">
+      <div class="img-a"><img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=900&q=80" alt="Projeto de arquitetura"></div>
+      <div class="img-b"><img src="https://images.unsplash.com/photo-1541123437800-1bb1317badc2?auto=format&fit=crop&w=700&q=80" alt="Execução de obra"></div>
+    </div>
+    <div class="about-text reveal">
+      <p class="eyebrow">Quem somos</p>
+      <h2 class="split-reveal">Uma empresa nova, uma equipe com anos de experiência</h2>
+      <p>A Nephila Engenharia é uma empresa nova, criada por profissionais com anos de experiência no mercado de reformas e arquitetura. Unimos técnica e sensibilidade estética para acompanhar o cliente desde o projeto conceitual até a entrega das chaves, com atenção a prazo, orçamento e qualidade em cada etapa.</p>
+      <p>Trabalhamos com reformas residenciais, comerciais e corporativas, sempre com foco em funcionalidade, durabilidade e um resultado visual que valoriza o imóvel.</p>
+      <ul class="about-list">
+        <li>Projeto arquitetônico</li>
+        <li>Gestão de obra completa</li>
+        <li>Equipe própria especializada</li>
+        <li>Materiais e acabamentos premium</li>
+        <li>Cronograma e orçamento fechados</li>
+        <li>Pós-obra e garantia</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="servicos">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">O que fazemos</p>
+      <h2 class="split-reveal">Serviços especializados em reforma e arquitetura</h2>
+      <p>Soluções completas para transformar residências e espaços comerciais, do planejamento à execução final.</p>
+    </div>
+  </div>
+  <div class="container">
+    <div class="services-grid reveal">
+      <div class="service-card">
+        <span class="service-num">01</span>
+        <h3>Reforma Residencial</h3>
+        <p>Renovação completa de casas e apartamentos, com projeto personalizado para cada estilo de vida.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-num">02</span>
+        <h3>Reforma Comercial</h3>
+        <p>Lojas, escritórios e restaurantes reformados com foco em identidade de marca e experiência do cliente.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-num">03</span>
+        <h3>Projeto Arquitetônico</h3>
+        <p>Criação de plantas, layouts 3D e memoriais descritivos alinhados às normas técnicas vigentes.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-num">04</span>
+        <h3>Gestão de Obra</h3>
+        <p>Acompanhamento técnico diário, controle de cronograma, fornecedores e qualidade de execução.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-num">05</span>
+        <h3>Acabamentos e Marcenaria</h3>
+        <p>Escolha de revestimentos, iluminação e móveis planejados que fecham o conceito do projeto.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-num">06</span>
+        <h3>Consultoria Técnica</h3>
+        <p>Laudos, vistorias e assessoria para regularização e viabilidade de projetos de reforma.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="portfolio-section" id="portfolio">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Portfólio</p>
+      <h2 class="split-reveal">Projetos que já executamos</h2>
+      <p>Uma amostra do nosso trabalho, do acabamento decorativo à pintura e repaginação completa de ambientes.</p>
+    </div>
+
+    <div class="portfolio-project reveal">
+      <h3 class="portfolio-project-title">Boiserie sob medida</h3>
+      <p class="portfolio-project-desc">Painel de parede decorativo com pintura em tom monocromático e acabamento premium — do durante ao resultado final.</p>
+      <div class="portfolio-grid">
+        <div class="p-item big">
+          <img src="fotos/boiserie-depois-01.jpg" alt="Boiserie finalizado, vista ampla">
+          <div class="p-overlay"><div><span class="tag">Depois</span><div class="title">Acabamento finalizado</div></div></div>
+        </div>
+        <div class="p-item">
+          <img src="fotos/boiserie-depois-02.jpg" alt="Boiserie finalizado com decoração">
+          <div class="p-overlay"><div><span class="tag">Depois</span><div class="title">Vista completa do ambiente</div></div></div>
+        </div>
+        <div class="p-item">
+          <img src="fotos/boiserie-depois-03.jpg" alt="Detalhe do boiserie finalizado">
+          <div class="p-overlay"><div><span class="tag">Depois</span><div class="title">Detalhe do boiserie</div></div></div>
+        </div>
+        <div class="p-item">
+          <img src="fotos/boiserie-durante-01.jpg" alt="Boiserie em fase de instalação">
+          <div class="p-overlay"><div><span class="tag">Durante</span><div class="title">Instalação em andamento</div></div></div>
+        </div>
+        <div class="p-item">
+          <img src="fotos/boiserie-durante-02.jpg" alt="Boiserie em execução">
+          <div class="p-overlay"><div><span class="tag">Durante</span><div class="title">Estrutura em execução</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="portfolio-project reveal">
+      <h3 class="portfolio-project-title">Pintura e acabamento residencial</h3>
+      <p class="portfolio-project-desc">Antes e depois de um apartamento repaginado com nova paleta de cores e acabamento completo.</p>
+      <div class="portfolio-grid">
+        <div class="p-item big">
+          <img src="fotos/projeto2-depois-01.jpg" alt="Sala finalizada, vista ampla">
+          <div class="p-overlay"><div><span class="tag">Depois</span><div class="title">Sala finalizada</div></div></div>
+        </div>
+        <div class="p-item">
+          <img src="fotos/projeto2-depois-02.jpg" alt="Sala finalizada, parede verde">
+          <div class="p-overlay"><div><span class="tag">Depois</span><div class="title">Parede de destaque</div></div></div>
+        </div>
+        <div class="p-item">
+          <img src="fotos/projeto2-depois-03.jpg" alt="Sala finalizada, vista das janelas">
+          <div class="p-overlay"><div><span class="tag">Depois</span><div class="title">Vista das janelas</div></div></div>
+        </div>
+        <div class="p-item">
+          <img src="fotos/projeto2-antes-01.jpg" alt="Ambiente em obra, antes da pintura">
+          <div class="p-overlay"><div><span class="tag">Antes</span><div class="title">Ambiente em obra</div></div></div>
+        </div>
+        <div class="p-item">
+          <img src="fotos/projeto2-antes-02.jpg" alt="Ambiente bruto, antes do acabamento">
+          <div class="p-overlay"><div><span class="tag">Antes</span><div class="title">Estrutura bruta</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="process" id="processo">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Como funciona</p>
+      <h2 class="split-reveal">Do primeiro contato à entrega das chaves</h2>
+    </div>
+    <div class="process-grid reveal">
+      <div class="process-card">
+        <span class="n">01</span>
+        <h3>Diagnóstico e briefing</h3>
+        <p>Visita técnica, levantamento do espaço e alinhamento de expectativas com o cliente.</p>
+      </div>
+      <div class="process-card">
+        <span class="n">02</span>
+        <h3>Projeto e orçamento</h3>
+        <p>Desenvolvimento do projeto arquitetônico, memorial de materiais e proposta fechada.</p>
+      </div>
+      <div class="process-card">
+        <span class="n">03</span>
+        <h3>Execução da obra</h3>
+        <p>Equipe própria em campo, com cronograma físico-financeiro acompanhado semanalmente.</p>
+      </div>
+      <div class="process-card">
+        <span class="n">04</span>
+        <h3>Entrega e garantia</h3>
+        <p>Vistoria final, ajustes finos e garantia técnica sobre toda a obra executada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials" id="diferenciais">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Diferenciais</p>
+      <h2 class="split-reveal">Por que escolher a Nephila</h2>
+      <p>Somos uma empresa nova, mas nossa equipe carrega anos de experiência prática em obras e projetos de arquitetura.</p>
+    </div>
+    <div class="t-grid reveal">
+      <div class="t-card">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:#fff;margin-bottom:14px;">Equipe experiente</h3>
+        <p>Profissionais com trajetória consolidada em engenharia, arquitetura e gestão de obras, prontos para aplicar esse conhecimento no seu projeto.</p>
+      </div>
+      <div class="t-card">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:#fff;margin-bottom:14px;">Transparência total</h3>
+        <p>Orçamento fechado, cronograma claro e atualização constante — você sabe exatamente o que está acontecendo em cada etapa da obra.</p>
+      </div>
+      <div class="t-card">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:#fff;margin-bottom:14px;">Atendimento próximo</h3>
+        <p>Como empresa nova, cada cliente recebe atenção dedicada — do primeiro contato até a entrega final do projeto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contato">
+  <div class="container contact-grid">
+    <div class="contact-info reveal">
+      <p class="eyebrow">Fale conosco</p>
+      <h2 class="split-reveal">Vamos planejar sua reforma?</h2>
+      <p>Preencha o formulário ou entre em contato diretamente. Nossa equipe responde em até 24h úteis com os próximos passos.</p>
+      <div class="info-row">
+        <div class="info-ic">📍</div>
+        <div><b>Endereço</b><span>Rua Terra Sem Males, 347 — São Paulo, SP, 08160-390</span></div>
+      </div>
+      <div class="info-row">
+        <div class="info-ic">📞</div>
+        <div><b>Telefone / WhatsApp</b><span>(11) 98701-6847</span></div>
+      </div>
+      <div class="info-row">
+        <div class="info-ic">✉️</div>
+        <div><b>E-mail</b><span>nephilaengenharia@gmail.com</span></div>
+      </div>
+    </div>
+    <form id="contactForm" class="reveal">
+      <div class="f-row">
+        <div class="field"><label>Nome</label><input type="text" name="nome" placeholder="Seu nome" required></div>
+        <div class="field"><label>Telefone</label><input type="tel" name="telefone" placeholder="(11) 90000-0000" required></div>
+      </div>
+      <div class="field"><label>E-mail</label><input type="email" name="email" placeholder="seuemail@exemplo.com" required></div>
+      <div class="field">
+        <label>Tipo de projeto</label>
+        <select name="tipo">
+          <option>Reforma Residencial</option>
+          <option>Reforma Comercial</option>
+          <option>Projeto Arquitetônico</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="field"><label>Conte sobre seu projeto</label><textarea name="mensagem" placeholder="Descreva brevemente o que você precisa..."></textarea></div>
+      <button type="submit" class="submit-btn">Solicitar orçamento</button>
+      <p class="form-note">Ao enviar, você concorda em ser contatado pela nossa equipe.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <img src="assets/logo-white-cropped.png" alt="Nephila Engenharia" class="footer-logo-img">
+        <p style="max-width:260px;font-size:14px;">Engenharia e arquitetura dedicadas a transformar espaços com precisão técnica e sensibilidade estética.</p>
+        <div class="socials" style="margin-top:20px;">
+          <a href="https://instagram.com/nephilaengenharia" target="_blank" rel="noopener" title="Instagram">ig</a>
+          <a href="#" title="Facebook (em breve)">fb</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#portfolio">Portfólio</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Serviços</h4>
+        <ul>
+          <li><a href="#servicos">Reforma Residencial</a></li>
+          <li><a href="#servicos">Reforma Comercial</a></li>
+          <li><a href="#servicos">Projeto Arquitetônico</a></li>
+          <li><a href="#servicos">Gestão de Obra</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <ul>
+          <li>(11) 98701-6847</li>
+          <li>nephilaengenharia@gmail.com</li>
+          <li>São Paulo, SP</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Nephila Engenharia. Todos os direitos reservados.</span>
+      <span>Feito com precisão e cuidado.</span>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/5511987016847?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento." target="_blank" rel="noopener" class="wa-float" aria-label="WhatsApp">💬</a>
+
+<script>
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('navLinks');
+  burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  function wrapWords(el){
+    const text = el.textContent;
+    el.textContent = '';
+    text.split(' ').forEach((word, i) => {
+      if (i > 0) el.appendChild(document.createTextNode(' '));
+      const outer = document.createElement('span');
+      outer.className = 'word';
+      const inner = document.createElement('span');
+      inner.className = 'word-inner';
+      inner.style.setProperty('--i', i);
+      inner.textContent = word;
+      outer.appendChild(inner);
+      el.appendChild(outer);
+    });
+  }
+
+  const splitEls = document.querySelectorAll('.split-reveal');
+  splitEls.forEach(wrapWords);
+
+  const heroTitle = document.getElementById('heroTitle');
+  if (heroTitle) setTimeout(() => heroTitle.classList.add('show'), 200);
+
+  const textIo = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+  }, { threshold: 0.4 });
+  splitEls.forEach(el => { if (el !== heroTitle) textIo.observe(el); });
+
+  document.getElementById('contactForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const f = this;
+    const subject = 'Solicitação de orçamento - ' + f.nome.value;
+    const body =
+      'Nome: ' + f.nome.value + '\n' +
+      'Telefone: ' + f.telefone.value + '\n' +
+      'E-mail: ' + f.email.value + '\n' +
+      'Tipo de projeto: ' + f.tipo.value + '\n\n' +
+      'Mensagem:\n' + f.mensagem.value;
+    const mailto = 'mailto:nephilaengenharia@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    window.location.href = mailto;
+    alert('Vamos abrir seu aplicativo de e-mail com os dados preenchidos. É só clicar em enviar!');
+    f.reset();
+  });
+</script>
+
+</body>
+</html>
